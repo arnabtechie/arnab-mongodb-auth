@@ -36,7 +36,7 @@ const protect = async (req, res, next) => {
 
     const user = await UserModel.findOne(
       { _id: decoded.id },
-      { name: 1, email: 1 }
+      { _id: 1, fullName: 1, email: 1 }
     );
 
     if (!user) {
