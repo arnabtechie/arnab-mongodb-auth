@@ -1,8 +1,8 @@
-const UserModel = require("../models/userModel");
-const jwt = require("jsonwebtoken");
-const config = require("../config");
-const bcrypt = require("bcrypt");
-const { validationResult } = require("express-validator");
+const UserModel = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const config = require('../config');
+const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 exports.signup = async (req, res) => {
   const errors = validationResult(req);
@@ -16,7 +16,7 @@ exports.signup = async (req, res) => {
 
   if (confirmPassword !== password) {
     return res.status(400).send({
-      error: "Password and Confirm Password are different",
+      error: 'Password and Confirm Password are different',
     });
   }
 
@@ -24,7 +24,7 @@ exports.signup = async (req, res) => {
     const user = await UserModel.findOne({ email }, { _id: 1 });
     if (user) {
       return res.status(400).send({
-        error: "User exists, try logging in",
+        error: 'User exists, try logging in',
       });
     }
 
@@ -35,13 +35,13 @@ exports.signup = async (req, res) => {
       });
 
       return res.status(201).send({
-        message: "User registered successfully",
+        message: 'User registered successfully',
         id: result._id,
         token,
       });
     }
 
-    return res.status(400).send({ error: "Something went wrong" });
+    return res.status(400).send({ error: 'Something went wrong' });
   } catch (err) {
     return res.status(500).send({ error: err.toString() });
   }
@@ -64,7 +64,7 @@ exports.login = async (req, res) => {
 
     if (!user) {
       return res.status(400).send({
-        error: "Invalid credentials",
+        error: 'Invalid credentials',
       });
     }
 
@@ -72,14 +72,14 @@ exports.login = async (req, res) => {
 
     if (!isMatch) {
       return res.status(400).send({
-        error: "Invalid credentials",
+        error: 'Invalid credentials',
       });
     }
 
     const token = jwt.sign({ id: user._id }, config.JWT_SECRET);
 
     return res.status(200).send({
-      message: "User logged in successfully",
+      message: 'User logged in successfully',
       id: user.id,
       full_name: user.fullName,
       email: user.email,
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-  return res.send(200).send({ message: "User logged out successfully" });
+  return res.send(200).send({ message: 'User logged out successfully' });
 };
 
 exports.user = async (req, res) => {
@@ -101,7 +101,7 @@ exports.user = async (req, res) => {
   );
   if (!user) {
     return res.status(400).send({
-      error: "Invalid user",
+      error: 'Invalid user',
     });
   }
   return res.status(200).json({ ...user });
@@ -114,7 +114,7 @@ exports.profile = async (req, res) => {
   );
   if (!user) {
     return res.status(400).send({
-      error: "Invalid user",
+      error: 'Invalid user',
     });
   }
   return res.status(200).json({ ...user });
