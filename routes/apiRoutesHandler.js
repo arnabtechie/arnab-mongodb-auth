@@ -6,7 +6,6 @@ const router = express.Router();
 
 const userRouter = express.Router();
 
-// ------------------------------Unauthenticated---------------------------//
 userRouter.post('/signup', async (req, res) => {
   const { status, data } = await authController.signup(req.body);
   res.status(status).json(data);
