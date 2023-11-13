@@ -1,7 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const mongoose = require('mongoose');
-const { login, logout, user, profile } = require('../controllers/auth');
+const { login } = require('../controllers/auth');
 const UserModel = require('../models/userModel');
 
 chai.use(chaiAsPromised);

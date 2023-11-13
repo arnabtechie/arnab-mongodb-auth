@@ -36,16 +36,4 @@ app.use((_, res) =>
   })
 );
 
-app.use((err, req, res, next) => {
-  console.error(err);
-
-  // Send an error response to the client
-  res.status(500).send({
-    error: {
-      message: err.message,
-      stack: err.stack,
-    },
-  });
-});
-
 module.exports = server;
