@@ -1,12 +1,16 @@
-# Node.js + MongoDB
+# Building a Scalable Node.js and MongoDB Application with Express
 
 A brief description of the project.
 
 ## Requirements
 
-- Node.js
+- Node.js (16.x or above)
+- Express.js
 - MongoDB
 - Mongoose
+- Chai (Assertion library used)
+- Mocha (Test framework used)
+- MongoDB In Memory (For unit testing only)
 
 ## Installation
 
@@ -15,10 +19,16 @@ A brief description of the project.
 3. Copy `config.json` and update the values with your MySQL database information.
 4. Start the application: `npm start`
 5. Start the application on dev mode: `npm run dev`
+6. Run the unit test cases on: `npm run test or npm test`
+7. Test the lint on: `npm run lint`
 
 ## Configuration
 
 The `config.json` file contains the configuration options for the application. Here is an example configuration:
+
+Configure prettier for VS Code for better formatting, please follow the .prettierrc to review the configuration
+
+Configure ESLint for linting and catching bad code, please follow the .eslintrc.json review the configuration
 
 ```json
 {
@@ -28,10 +38,10 @@ The `config.json` file contains the configuration options for the application. H
 }
 ```
 
-## Usage
-
-Here is a brief description of how to use the application.
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the ISC License, which means it is free to use, modify, and distribute. See the [LICENSE](LICENSE) file for details.
+
+### ISC License
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA, OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE, OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
