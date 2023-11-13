@@ -48,4 +48,4 @@ This section communicates that the project is under the ISC License, emphasizing
 
 ## Author
 
-### Arnab Banerjee - [Linkedin](https://www.linkedin.com/in/arnab-banerjee-208067164/)
+Arnab Banerjee - [https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white](https://www.linkedin.com/in/arnab-banerjee-208067164/)
