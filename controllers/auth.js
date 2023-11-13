@@ -84,7 +84,7 @@ const login = async (reqBody) => {
   try {
     const user = await UserModel.findOne(
       { email },
-      { uuid: 1, email: 1, fullName: 1, password: 1, _id: 1 }
+      { uuid: 1, email: 1, fullName: 1, password: 1, _id: 0 }
     ).lean();
 
     if (!user) {
@@ -97,7 +97,10 @@ const login = async (reqBody) => {
       return { status: 400, data: { error: 'Invalid credentials' } };
     }
 
-    const token = jwt.sign({ id: user._id }, config.JWT_SECRET);
+    const token = jwt.sign(
+      { uuid: user.uuid, createdAt: Date.now() },
+      config.JWT_SECRET
+    );
 
     return {
       status: 200,
