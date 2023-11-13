@@ -57,7 +57,7 @@ const signup = async (reqBody) => {
 
     return { status: 400, data: { error: 'Something went wrong' } };
   } catch (err) {
-    console.log(err.toString());
+    console.log(err.stack);
     return { status: 500, data: { error: err.toString() } };
   }
 };
@@ -102,7 +102,7 @@ const login = async (reqBody) => {
       },
     };
   } catch (err) {
-    console.log(err.toString());
+    console.log(err.stack);
     return { status: 500, data: { error: err.toString() } };
   }
 };
@@ -111,10 +111,10 @@ const logout = async () => {
   return { status: 200, data: { message: 'User logged out successfully' } };
 };
 
-const user = async ({ user }) => {
+const user = async (reqUser) => {
   try {
     const fetchedUser = await UserModel.findOne(
-      { _id: user._id },
+      { _id: abc._id },
       { email: 1, fullName: 1, createdAt: 1 }
     ).lean();
     if (!fetchedUser) {
@@ -122,15 +122,15 @@ const user = async ({ user }) => {
     }
     return { status: 200, data: { ...fetchedUser } };
   } catch (err) {
-    console.log(err.toString());
+    console.log(err.stack);
     return { status: 500, data: { error: err.toString() } };
   }
 };
 
-const profile = async ({ query }) => {
+const profile = async (reqQuery) => {
   try {
     const fetchedUser = await UserModel.findOne(
-      { _id: query._id },
+      { _id: reqQuery._id },
       { email: 1, fullName: 1, createdAt: 1 }
     ).lean();
     if (!fetchedUser) {
@@ -138,7 +138,7 @@ const profile = async ({ query }) => {
     }
     return { status: 200, data: { ...fetchedUser } };
   } catch (err) {
-    console.log(err.toString());
+    console.log(err.stack);
     return { status: 500, data: { error: err.toString() } };
   }
 };

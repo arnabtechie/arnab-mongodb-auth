@@ -1,40 +1,37 @@
 const express = require('express');
 const authController = require('../controllers/auth.js');
-const protect = require('../middleware/protect');
+const protect = require('../middleware/protect.js');
 
 const router = express.Router();
 
+const userRouter = express.Router();
+
 // ------------------------------Unauthenticated---------------------------//
-router.post('/users/signup', async (req, res) => {
+userRouter.post('/signup', async (req, res) => {
   const { status, data } = await authController.signup(req.body);
   res.status(status).json(data);
 });
 
-router.post('/users/login', async (req, res) => {
+userRouter.post('/login', async (req, res) => {
   const { status, data } = await authController.login(req.body);
   res.status(status).json(data);
 });
 
-// ----------------------------------------------------------------------//
-
-router.use(protect);
-
-// ------------------------------Authenticated---------------------------//
-router.get('/users/logout', async (req, res) => {
+userRouter.get('/logout', protect, async (req, res) => {
   const { status, data } = await authController.logout();
   res.status(status).json(data);
 });
 
-router.get('/users/me', async (req, res) => {
+userRouter.get('/me', protect, async (req, res) => {
   const { status, data } = await authController.user(req.user);
   res.status(status).json(data);
 });
 
-router.get('/users/user', async (req, res) => {
+userRouter.get('/user', protect, async (req, res) => {
   const { status, data } = await authController.profile(req.query);
   res.status(status).json(data);
 });
 
-// ---------------------------------------------------------------------//
+router.use('/users', userRouter);
 
 module.exports = router;

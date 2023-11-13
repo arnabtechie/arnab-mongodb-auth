@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const http = require('http');
 const helmet = require('helmet');
-const apiRoutes = require('./routes/apiRoutes');
+const apiRoutes = require('./routes/apiRoutesHandler');
 const mongoose = require('mongoose');
 const config = require('./config');
 
