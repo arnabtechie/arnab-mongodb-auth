@@ -5,7 +5,6 @@ const UserModel = require('../models/userModel');
 
 chai.use(chaiAsPromised);
 
-chai.use(chaiAsPromised);
 const { expect } = chai;
 
 beforeEach(async () => {
