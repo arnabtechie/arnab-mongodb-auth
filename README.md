@@ -2,7 +2,7 @@
 
 A brief description of the project.
 
-## Requirements
+## Tools used
 
 - Node.js (16.x or above)
 - Express.js
