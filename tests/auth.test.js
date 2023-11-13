@@ -48,5 +48,36 @@ describe('Auth Controller Functions', () => {
         .equal('john_doe@example.com');
       expect(result.data).to.have.property('token');
     });
+
+    it('should not log in, should return validation error', async () => {
+      const loginData = {
+        email: 'john_doe@example.com',
+      };
+
+      const result = await login(loginData);
+      expect(result.status).to.equal(400);
+    });
+
+    it('should not log in, should return wrong credentials (wrong password)', async () => {
+      const loginData = {
+        email: 'john_doe@example.com',
+        password: '865413521',
+      };
+
+      const result = await login(loginData);
+      expect(result.status).to.equal(400);
+      expect(result.data.error).to.equal('Invalid credentials');
+    });
+
+    it('should not log in, should return wrong credentials (wrong email and password)', async () => {
+      const loginData = {
+        email: 'john_doe23@example.com',
+        password: '865413521',
+      };
+
+      const result = await login(loginData);
+      expect(result.status).to.equal(400);
+      expect(result.data.error).to.equal('Invalid credentials');
+    });
   });
 });
