@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const apiRoutes = require('./routes/apiRoutesHandler');
 const mongoose = require('mongoose');
 const config = require('./config');
+const compression = require('compression');
 
 const app = express();
 
@@ -23,6 +24,7 @@ mongoose.connection.once('open', () => {
   console.log('Database connected');
 });
 
+app.use(compression());
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
