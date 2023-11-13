@@ -4,6 +4,7 @@ const config = require('../config');
 const bcrypt = require('bcrypt');
 const { validate } = require('../utils/validator');
 const { isEmptyArray } = require('../utils/common');
+const { v4: uuidv4 } = require('uuid');
 
 const signup = async (reqBody) => {
   try {
@@ -31,7 +32,7 @@ const signup = async (reqBody) => {
       };
     }
 
-    const user = await UserModel.findOne({ email }, { _id: 1 }).lean();
+    const user = await UserModel.findOne({ email }, { uuid: 1, _id: 1 }).lean();
     if (user) {
       return {
         status: 400,
@@ -39,18 +40,25 @@ const signup = async (reqBody) => {
       };
     }
 
-    const result = await UserModel.create({ fullName, email, password });
+    const result = await UserModel.create({
+      uuid: uuidv4(),
+      fullName,
+      email,
+      password,
+    });
     if (result) {
-      const token = jwt.sign({ id: result._id }, config.JWT_SECRET, {
-        expiresIn: 86400 * 30,
-      });
+      const token = jwt.sign(
+        { id: result.uuid, createdAt: Date.now() },
+        config.JWT_SECRET
+      );
 
       return {
         status: 201,
         data: {
           message: 'User registered successfully',
-          id: result._id,
+          uuid: result.uuid,
           token,
+          email,
         },
       };
     }
@@ -76,7 +84,7 @@ const login = async (reqBody) => {
   try {
     const user = await UserModel.findOne(
       { email },
-      { email: 1, fullName: 1, password: 1 }
+      { uuid: 1, email: 1, fullName: 1, password: 1, _id: 1 }
     ).lean();
 
     if (!user) {
@@ -95,7 +103,7 @@ const login = async (reqBody) => {
       status: 200,
       data: {
         message: 'User logged in successfully',
-        id: user.id,
+        uuid: user.uuid,
         full_name: user.fullName,
         email: user.email,
         token,
@@ -114,8 +122,8 @@ const logout = async () => {
 const user = async (reqUser) => {
   try {
     const fetchedUser = await UserModel.findOne(
-      { _id: abc._id },
-      { email: 1, fullName: 1, createdAt: 1 }
+      { uuid: reqUser.uuid },
+      { uuid: 1, email: 1, fullName: 1, createdAt: 1, _id: 0 }
     ).lean();
     if (!fetchedUser) {
       return { status: 400, data: { error: 'Invalid user' } };
@@ -130,8 +138,8 @@ const user = async (reqUser) => {
 const profile = async (reqQuery) => {
   try {
     const fetchedUser = await UserModel.findOne(
-      { _id: reqQuery._id },
-      { email: 1, fullName: 1, createdAt: 1 }
+      { uuid: reqQuery.uuid },
+      { uuid: 1, email: 1, fullName: 1, createdAt: 1, _id: 0 }
     ).lean();
     if (!fetchedUser) {
       return { status: 400, data: { error: 'Invalid user' } };

@@ -30,8 +30,8 @@ module.exports = async (req, res, next) => {
     }
 
     const user = await UserModel.findOne(
-      { _id: decoded.id },
-      { _id: 1, fullName: 1, email: 1 }
+      { uuid: decoded.uuid },
+      { _id: 1, fullName: 1, email: 1, uuid: 1 }
     ).lean();
 
     if (!user) {

@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const bcrypt = require('bcrypt');
-const { signup, login, logout, user, profile } = require('../controllers/auth');
+const mongoose = require('mongoose');
+const { login, logout, user, profile } = require('../controllers/auth');
 const UserModel = require('../models/userModel');
 
 chai.use(chaiAsPromised);
@@ -11,11 +11,13 @@ const { expect } = chai;
 
 beforeEach(async () => {
   await UserModel.create({
+    uuid: 'd5584db5-4d08-41fa-9826-47dcdfe07645',
     fullName: 'John Doe',
     email: 'john_doe@example.com',
     password: '123456',
   });
   await UserModel.create({
+    uuid: 'b0ca1c4e-a49d-464d-bb9f-91173476e684',
     fullName: 'Foo Bar',
     email: 'foo_bar@example.com',
     password: '123456',
@@ -39,6 +41,9 @@ describe('Auth Controller Functions', () => {
       expect(result.data)
         .to.have.property('message')
         .equal('User logged in successfully');
+      expect(result.data)
+        .to.have.property('uuid')
+        .equal('d5584db5-4d08-41fa-9826-47dcdfe07645');
       expect(result.data).to.have.property('full_name').equal('John Doe');
       expect(result.data)
         .to.have.property('email')
