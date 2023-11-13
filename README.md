@@ -10,7 +10,7 @@ A brief description of the project.
 - Mongoose
 - Chai (Assertion library used)
 - Mocha (Test framework used)
-- MongoDB In Memory (For unit testing only)
+- MongoDB in Memory Server (For unit testing only)
 
 ## Installation
 
