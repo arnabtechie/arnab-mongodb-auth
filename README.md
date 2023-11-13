@@ -46,6 +46,6 @@ This project is licensed under the ISC License, which means it is free to use, m
 
 This section communicates that the project is under the ISC License, emphasizing its permissive nature and that it's free to use.
 
-### Author
+## Author
 
-Arnab Banerjee - [Linkedin](https://www.linkedin.com/in/arnab-banerjee-208067164/)
+### Arnab Banerjee - [Linkedin](https://www.linkedin.com/in/arnab-banerjee-208067164/)
