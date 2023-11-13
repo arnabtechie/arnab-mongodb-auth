@@ -107,7 +107,7 @@ const login = async (reqBody) => {
       data: {
         message: 'User logged in successfully',
         uuid: user.uuid,
-        full_name: user.fullName,
+        fullName: user.fullName,
         email: user.email,
         token,
       },

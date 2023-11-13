@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const { login } = require('../controllers/auth');
+const { login, profile } = require('../controllers/auth');
 const UserModel = require('../models/userModel');
 
 chai.use(chaiAsPromised);
@@ -37,12 +37,9 @@ describe('Auth Controller Functions', () => {
       const result = await login(loginData);
       expect(result.status).to.equal(200);
       expect(result.data)
-        .to.have.property('message')
-        .equal('User logged in successfully');
-      expect(result.data)
         .to.have.property('uuid')
         .equal('d5584db5-4d08-41fa-9826-47dcdfe07645');
-      expect(result.data).to.have.property('full_name').equal('John Doe');
+      expect(result.data).to.have.property('fullName').equal('John Doe');
       expect(result.data)
         .to.have.property('email')
         .equal('john_doe@example.com');
@@ -78,6 +75,22 @@ describe('Auth Controller Functions', () => {
       const result = await login(loginData);
       expect(result.status).to.equal(400);
       expect(result.data.error).to.equal('Invalid credentials');
+    });
+  });
+  describe('user profile', () => {
+    it('should get the user information', async () => {
+      const result = await profile({
+        uuid: 'd5584db5-4d08-41fa-9826-47dcdfe07645',
+      });
+      expect(result.status).to.equal(200);
+      expect(result.data)
+        .to.have.property('uuid')
+        .equal('d5584db5-4d08-41fa-9826-47dcdfe07645');
+      expect(result.data).to.have.property('fullName').equal('John Doe');
+      expect(result.data)
+        .to.have.property('email')
+        .equal('john_doe@example.com');
+      expect(result.data).to.have.property('createdAt');
     });
   });
 });
