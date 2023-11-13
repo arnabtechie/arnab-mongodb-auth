@@ -16,7 +16,7 @@ A brief description of the project.
 
 1. Clone the repository: `git clone https://github.com/arnabtechie/arnab-mongodb-auth.git`
 2. Install dependencies: `npm install`
-3. Copy `config.json` and update the values with your MongoDB database information.
+3. Copy `config.json` and update the values with your MongoDB connection information.
 4. Start the application: `npm start`
 5. Start the application on dev mode: `npm run dev`
 6. Run the unit test cases on: `npm run test or npm test`
