@@ -9,9 +9,11 @@ before(async function () {
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
   await mongoose.connect(mongoUri);
+  console.log('Mock database created and connected...');
 });
 
 after(async function () {
   await mongoose.disconnect();
   await mongoServer.stop();
+  console.log('Mock database disonnected and destroyed...');
 });
