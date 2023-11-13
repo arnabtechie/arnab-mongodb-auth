@@ -13,10 +13,7 @@ app.get('/', (req, res) => res.status(200).send({ message: 'success' }));
 
 const server = http.createServer(app);
 
-mongoose.connect(config.DB_CONNECTION_STRING, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(config.DB_CONNECTION_STRING);
 
 mongoose.connection.on(
   'error',
@@ -30,6 +27,7 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
+
 app.use('/api', apiRoutes);
 
 app.use((_, res) =>
@@ -37,5 +35,17 @@ app.use((_, res) =>
     error: '404 route not found',
   })
 );
+
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  // Send an error response to the client
+  res.status(500).send({
+    error: {
+      message: err.message,
+      stack: err.stack,
+    },
+  });
+});
 
 module.exports = server;

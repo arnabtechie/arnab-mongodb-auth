@@ -2,30 +2,41 @@ const UserModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const bcrypt = require('bcrypt');
-const { validationResult } = require('express-validator');
+const { validate } = require('../utils/validator');
+const { isEmptyArray } = require('../utils/common');
 
-exports.signup = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).send({
-      error: errors,
-    });
-  }
-
-  const { email, password, fullName, confirmPassword } = req.body;
-
-  if (confirmPassword !== password) {
-    return res.status(400).send({
-      error: 'Password and Confirm Password are different',
-    });
-  }
-
+const signup = async (reqBody) => {
   try {
-    const user = await UserModel.findOne({ email }, { _id: 1 });
+    const validationArray = validate(reqBody, [
+      'fullName',
+      'email',
+      'password',
+      'confirmPassword',
+    ]);
+
+    if (!isEmptyArray(validationArray)) {
+      return {
+        status: 400,
+        data: {
+          error: `'${validationArray.toString()}' field(s) required`,
+        },
+      };
+    }
+    const { email, password, fullName, confirmPassword } = reqBody;
+
+    if (confirmPassword !== password) {
+      return {
+        status: 400,
+        data: { error: 'Password and Confirm Password are different' },
+      };
+    }
+
+    const user = await UserModel.findOne({ email }, { _id: 1 }).lean();
     if (user) {
-      return res.status(400).send({
-        error: 'User exists, try logging in',
-      });
+      return {
+        status: 400,
+        data: { error: 'User exists, try logging in' },
+      };
     }
 
     const result = await UserModel.create({ fullName, email, password });
@@ -34,88 +45,102 @@ exports.signup = async (req, res) => {
         expiresIn: 86400 * 30,
       });
 
-      return res.status(201).send({
-        message: 'User registered successfully',
-        id: result._id,
-        token,
-      });
+      return {
+        status: 201,
+        data: {
+          message: 'User registered successfully',
+          id: result._id,
+          token,
+        },
+      };
     }
 
-    return res.status(400).send({ error: 'Something went wrong' });
+    return { status: 400, data: { error: 'Something went wrong' } };
   } catch (err) {
-    return res.status(500).send({ error: err.toString() });
+    console.log(err.toString());
+    return { status: 500, data: { error: err.toString() } };
   }
 };
 
-exports.login = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).send({
-      error: errors,
-    });
+const login = async (reqBody) => {
+  const validationArray = validate(reqBody, ['email', 'password']);
+
+  if (!isEmptyArray(validationArray)) {
+    return {
+      status: 400,
+      data: { error: `'${validationArray.toString()}' field(s) required` },
+    };
   }
-  const { email, password } = req.body;
+  const { email, password } = reqBody;
 
   try {
     const user = await UserModel.findOne(
       { email },
       { email: 1, fullName: 1, password: 1 }
-    );
+    ).lean();
 
     if (!user) {
-      return res.status(400).send({
-        error: 'Invalid credentials',
-      });
+      return { status: 400, data: { error: 'Invalid credentials' } };
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send({
-        error: 'Invalid credentials',
-      });
+      return { status: 400, data: { error: 'Invalid credentials' } };
     }
 
     const token = jwt.sign({ id: user._id }, config.JWT_SECRET);
 
-    return res.status(200).send({
-      message: 'User logged in successfully',
-      id: user.id,
-      full_name: user.fullName,
-      email: user.email,
-      token,
-    });
+    return {
+      status: 200,
+      data: {
+        message: 'User logged in successfully',
+        id: user.id,
+        full_name: user.fullName,
+        email: user.email,
+        token,
+      },
+    };
   } catch (err) {
-    return res.status(500).send({ error: err.toString() });
+    console.log(err.toString());
+    return { status: 500, data: { error: err.toString() } };
   }
 };
 
-exports.logout = async (req, res) => {
-  return res.send(200).send({ message: 'User logged out successfully' });
+const logout = async () => {
+  return { status: 200, data: { message: 'User logged out successfully' } };
 };
 
-exports.user = async (req, res) => {
-  const user = await UserModel.findOne(
-    { _id: req.user._id },
-    { email: 1, fullName: 1, createdAt: 1 }
-  );
-  if (!user) {
-    return res.status(400).send({
-      error: 'Invalid user',
-    });
+const user = async ({ user }) => {
+  try {
+    const fetchedUser = await UserModel.findOne(
+      { _id: user._id },
+      { email: 1, fullName: 1, createdAt: 1 }
+    ).lean();
+    if (!fetchedUser) {
+      return { status: 400, data: { error: 'Invalid user' } };
+    }
+    return { status: 200, data: { ...fetchedUser } };
+  } catch (err) {
+    console.log(err.toString());
+    return { status: 500, data: { error: err.toString() } };
   }
-  return res.status(200).json({ ...user });
 };
 
-exports.profile = async (req, res) => {
-  const user = await UserModel.findOne(
-    { _id: req.user._id },
-    { email: 1, fullName: 1, createdAt: 1 }
-  );
-  if (!user) {
-    return res.status(400).send({
-      error: 'Invalid user',
-    });
+const profile = async ({ query }) => {
+  try {
+    const fetchedUser = await UserModel.findOne(
+      { _id: query._id },
+      { email: 1, fullName: 1, createdAt: 1 }
+    ).lean();
+    if (!fetchedUser) {
+      return { status: 400, data: { error: 'Invalid user' } };
+    }
+    return { status: 200, data: { ...fetchedUser } };
+  } catch (err) {
+    console.log(err.toString());
+    return { status: 500, data: { error: err.toString() } };
   }
-  return res.status(200).json({ ...user });
 };
+
+module.exports = { signup, login, logout, user, profile };
