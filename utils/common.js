@@ -1,15 +1,11 @@
 const isArray = (value) => Array.isArray(value);
 
+const isObject = (value) =>
+  typeof value === 'object' && 'object' && value !== null ? true : false;
+
 const isEmptyArray = (value) => {
   let isValueArray = isArray(value);
   if (isValueArray && value.length === 0) {
-    return true;
-  }
-  return false;
-};
-
-const isObject = (value) => {
-  if (typeof value === 'object' && value !== null) {
     return true;
   }
   return false;
