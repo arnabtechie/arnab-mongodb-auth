@@ -10,7 +10,7 @@ const compression = require('compression');
 
 const app = express();
 
-app.get('/', (req, res) => res.status(200).send({ message: 'success' }));
+app.get('/', (req, res) => res.status(200).sendStatus(200));
 
 const server = http.createServer(app);
 
