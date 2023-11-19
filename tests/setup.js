@@ -1,7 +1,7 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
-let mongoServer;
+let mongoServer = null;
 
 before(async () => {
   this.timeout(120000);
