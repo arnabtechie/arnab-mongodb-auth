@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 let mongoServer;
 
-before(async function () {
+before(async () => {
   this.timeout(120000);
 
   mongoServer = await MongoMemoryServer.create();
@@ -12,7 +12,7 @@ before(async function () {
   console.log('Mock database created and connected...');
 });
 
-after(async function () {
+after(async () => {
   await mongoose.disconnect();
   await mongoServer.stop();
   console.log('Mock database disonnected and destroyed...');
