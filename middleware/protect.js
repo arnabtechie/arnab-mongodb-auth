@@ -36,7 +36,8 @@ module.exports = async (req, res, next) => {
 
     if (!user) {
       return res.status(401).send({
-        error: 'User belonging to this token does no longer exist',
+        error:
+          'User belonging to this token does no longer exist, please login again',
       });
     }
 
