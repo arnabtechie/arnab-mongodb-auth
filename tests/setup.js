@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 let mongoServer = null;
 
-before(async () => {
+before(async function () {
   this.timeout(120000);
 
   mongoServer = await MongoMemoryServer.create();
