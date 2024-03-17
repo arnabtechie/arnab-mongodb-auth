@@ -32,6 +32,12 @@ app.use(express.json());
 
 app.use('/api', apiRoutes);
 
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _) => {
+  console.error(err);
+  res.status(500).send({ error: 'Internal Server Error' });
+});
+
 app.use((_, res) =>
   res.status(404).send({
     error: '404 route not found',
